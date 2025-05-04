@@ -1,0 +1,63 @@
+<!-- shop.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shop</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; }
+    .products { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .product {
+      border: 1px solid #ccc;
+      padding: 1rem;
+      border-radius: 5px;
+      width: 200px;
+      text-align: center;
+    }
+    button {
+      background: green;
+      color: white;
+      border: none;
+      padding: 0.5rem;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Shop</h1>
+  <div class="products" id="productList"></div>
+
+  <script>
+    const products = [
+      { id: 1, name: "T-shirt", price: 20 },
+      { id: 2, name: "Sneakers", price: 50 },
+      { id: 3, name: "Backpack", price: 35 },
+    ];
+
+    const container = document.getElementById("productList");
+    products.forEach(p => {
+      const div = document.createElement("div");
+      div.className = "product";
+      div.innerHTML = `
+        <h3>${p.name}</h3>
+        <p>$${p.price}</p>
+        <button onclick="addToCart(${p.id})">Add to Cart</button>
+      `;
+      container.appendChild(div);
+    });
+
+    function addToCart(id) {
+      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      cart.push(id);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      alert("Added to cart!");
+    }
+  </script>
+  <br/>
+  <main>
+    <a href="cart.html">Go to Cart</a>
+  </main>
+</body>
+</html>

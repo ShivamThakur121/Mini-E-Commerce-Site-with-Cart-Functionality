@@ -1,0 +1,76 @@
+<!-- cart.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cart</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; }
+    .cart-item {
+      border-bottom: 1px solid #ccc;
+      padding: 1rem 0;
+    }
+    .cart-item span {
+      display: inline-block;
+      width: 150px;
+    }
+    .total {
+      font-weight: bold;
+      margin-top: 1rem;
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Your Cart</h1>
+  <div id="cartItems"></div>
+  <p class="total" id="total"></p>
+
+  <script>
+    // Product database (same as in shop.html)
+    const products = {
+      1: { name: "T-shirt", price: 20 },
+      2: { name: "Sneakers", price: 50 },
+      3: { name: "Backpack", price: 35 },
+    };
+
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+    // Count quantities
+    const quantityMap = {};
+    cart.forEach(id => {
+      quantityMap[id] = (quantityMap[id] || 0) + 1;
+    });
+
+    const container = document.getElementById("cartItems");
+    let total = 0;
+
+    for (const id in quantityMap) {
+      const item = products[id];
+      const quantity = quantityMap[id];
+      const subtotal = item.price * quantity;
+      total += subtotal;
+
+      const div = document.createElement("div");
+      div.className = "cart-item";
+      div.innerHTML = `
+        <span>${item.name}</span>
+        <span>Qty: ${quantity}</span>
+        <span>Price: $${item.price}</span>
+        <span>Subtotal: $${subtotal}</span>
+      `;
+      container.appendChild(div);
+    }
+
+    document.getElementById("total").textContent = "Total: $" + total;
+
+    function clearCart() {
+        localStorage.removeItem("cart");
+        location.reload(); // Refresh the page to reflect changes
+      }      
+  </script>
+  <br>
+  <button onclick="clearCart()">Clear Cart</button>
+</body>
+</html>
